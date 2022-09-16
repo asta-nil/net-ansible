@@ -1,0 +1,19 @@
+- host: web-server
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  vars_file: 
+    - vars.yaml
+  
+  tasks:
+    - name: Update all packages
+      apt:
+        update_cache: yes
+        name: "*"
+        state: latest
+
+    - name: Install python
+      apt:
+        pkg: python3.6
+    
+    
