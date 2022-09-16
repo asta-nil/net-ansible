@@ -4,7 +4,8 @@
   become_method: sudo
   vars_file: 
     - vars.yaml
-  
+  vars:
+    ansible_ssh_private_key_file: "{{ keys }}"
   tasks:
     - name: Update all packages
       apt:
@@ -16,4 +17,14 @@
       apt:
         pkg: python3.6
     
-    
+    - name: Copy a "sudoers" file on the remote machine for editing
+      ansible.builtin.copy:
+        src: ./requiremets.txt
+        dest: /home/testadmin/requirements.txt
+        remote_src: yes
+
+    - name: Install specified python requirements in indicated (virtualenv)
+      ansible.builtin.pip:
+        requirements: /home/testadmin/requirements.txt
+        virtualenv: /home/testadmin/venv
+        
