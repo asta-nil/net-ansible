@@ -1,11 +1,12 @@
-- host: web-server
-  remote_user: ubuntu
+- hosts: 
+    - web-server
+  remote_user: testadmin
   become: true
   become_method: sudo
-  vars_file: 
+  vars_files: 
     - vars.yaml
   vars:
-    ansible_ssh_private_key_file: "{{ keys }}"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
   tasks:
     - name: Update all packages
       apt:
@@ -13,18 +14,34 @@
         name: "*"
         state: latest
 
-    - name: Install python
+    - name: Install system dependecies
+      become: yes
+      become_method: sudo
       apt:
-        pkg: python3.6
+        name: 
+          - python3-pip
+          - build-essential 
+          - libssl-dev 
+          - libffi-dev 
+          - python-dev
+
+    - name: Install pip dependecies
+      become: yes
+      become_method: sudo
+      pip:
+        name: 
+          - virtualenv     
+          - setuptools
     
-    - name: Copy a "sudoers" file on the remote machine for editing
+    - name: Copy a requirements file on the remote machine
       ansible.builtin.copy:
-        src: ./requiremets.txt
+        src: /home/danyil/ansible/requirements.txt
         dest: /home/testadmin/requirements.txt
-        remote_src: yes
+        remote_src: false
+        follow: yes
 
     - name: Install specified python requirements in indicated (virtualenv)
       ansible.builtin.pip:
         requirements: /home/testadmin/requirements.txt
-        virtualenv: /home/testadmin/venv
-        
+        virtualenv: /home/testadmin/venv/
+     

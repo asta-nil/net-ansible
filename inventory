@@ -1,3 +1,1 @@
-web-server ansible_host=3.74.156.7
-
-keys ansible_ssh_private_key_file=~/.ssh/id_rsa
+web-server ansible_host=40.114.230.107
