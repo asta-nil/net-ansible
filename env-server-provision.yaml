@@ -8,6 +8,7 @@
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
   tasks:
+
     - name: Update all packages
       apt:
         update_cache: yes
@@ -43,5 +44,5 @@
     - name: Install specified python requirements in indicated (virtualenv)
       ansible.builtin.pip:
         requirements: /home/testadmin/requirements.txt
-        virtualenv: /home/testadmin/venv/
+        virtualenv: /home/testadmin/requirements/
      
