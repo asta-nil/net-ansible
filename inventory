@@ -1,1 +1,2 @@
-web-server ansible_host=40.114.230.107
+web-server ansible_host=20.229.163.57
+ansible_python_interpreter=/usr/bin/python
