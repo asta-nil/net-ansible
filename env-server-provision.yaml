@@ -56,4 +56,3 @@
         requirements: "{{item.path}}"
         virtualenv: /home/testadmin/{{item.path.split('/')[4].split('.txt')[0]}}
       with_items: "{{ output.files }}"
-        
