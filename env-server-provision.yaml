@@ -31,17 +31,29 @@
       pip:
         name: 
           - virtualenv
-          - setuptools
-    
-    - name: Copy a requirements file on the remote machine
-      ansible.builtin.copy:
-        src: /home/danyil/ansible/requirements.txt
-        dest: /home/testadmin/requirements.txt
+          - setuptools    
+
+    - name: Copy a requirements files on the remote machine
+      copy:
+        src: /home/danyil/ansible
+        dest: /home/testadmin
         remote_src: false
         follow: yes
 
+    - name : Find .txt files
+      find:
+        paths: /home/testadmin/ansible
+        patterns: '*.txt'
+        recurse: yes
+        file_type: any
+      register: output
+
+    - debug: var=item.path.split('/')
+      with_items: "{{ output.files }}"
+
     - name: Install specified python requirements in indicated (virtualenv)
       pip:
-        requirements: /home/testadmin/requirements.txt
-        virtualenv: /home/testadmin/requirements/
+        requirements: "{{item.path}}"
+        virtualenv: /home/testadmin/{{item.path.split('/')[4].split('.txt')[0]}}
+      with_items: "{{ output.files }}"
         
